@@ -1,4 +1,4 @@
-function home(){
+function Home(){
     return(
         <div className="mx-auto py-10">
             <h1 className="text-4xl font-bold text-center mb-6">Welcome To News Portal</h1>
@@ -6,3 +6,5 @@ function home(){
         </div>
     )
 }
+
+export default Home;
