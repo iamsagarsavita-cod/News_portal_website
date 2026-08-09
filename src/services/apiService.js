@@ -6,7 +6,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const getTopHeadlines = async () => {
     try{
         const res = await Axios.get(
-            `${BASE_URL}/top-headlines?category=general&lang=en&apikey=${API_KEY}`,
+            `${BASE_URL}/top-headlines?category=general&lang=en&max=9&apikey=${API_KEY}`,
         );
         console.log(res.data.articles);
         
@@ -16,3 +16,15 @@ export const getTopHeadlines = async () => {
         return []
     }
 };
+
+// Category News
+export const getCategoryNews = async (category) => {
+    try{
+        const res = await Axios.get(
+            `${BASE_URL} top-headlines/category=${category}&lang=en&max=9&apikey=${API_KEY}`,
+        )
+    }catch (error) {
+    console.log(error, "Error in Fetching Category News");
+    return []
+    }
+}

@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getTopHeadlines } from '../services/apiService';
+import { getTopHeadlines, getCategoryNews} from '../services/apiService';
 import Loader from '../Components/Loader';
 import NewsCard from '../Components/NewsCard';
+import Category from '../components/Category';
 
 const Home = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [newsData, setNewsData] = useState([]);
+
+  const [category, setcategory] = useState("general");
 
   useEffect(() => {
+        fetchNews();
+  }, []);
+
     const fetchNews = async () => {
       try {
-        const articles = await getTopHeadlines();
-        console.log('Fetched Articles:', articles); // Now logged properly
-
-        setNews(articles || []);
+        let data;
+        if(category === "general"){
+            data = await getTopHeadlines();
+        }else{
+            data = await getCategoryNews(category);
+        }
+        console.log(data);
+        setNews(data);
+        
       } catch (error) {
         console.error('Failed to fetch news:', error);
         toast.error("Something went wrong :(");
@@ -22,9 +34,6 @@ const Home = () => {
         setLoading(false);
       }
     };
-
-    fetchNews();
-  }, []);
 
   if (loading) {
     return <Loader size="medium" />;
@@ -77,6 +86,8 @@ const Home = () => {
           Explore News ↓
         </button>
       </div>
+
+    <Category category={category} setcategory={setcategory} />
 
       {/* News Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 py-6">
