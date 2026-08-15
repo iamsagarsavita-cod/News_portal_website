@@ -3,18 +3,20 @@ import React from 'react';
 const NewsCard = ({ news }) => {
   // Defensive check to avoid runtime errors if news is undefined
   if (!news) return null;
+const defaultImage =
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR046TIwghhR9kPLo29rgRTuVdJmqNQs2iFZG5is60nZQ&s=10";
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-100">
       {/* Article Image with Fallback */}
       <div className="h-48 w-full overflow-hidden bg-gray-100 relative">
         <img
-          src={news.image || 'https://via.placeholder.com/600x400?text=News+Image'}
+          src={news.image || defaultImage}
           alt={news.title || 'News'}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
           onError={(e) => {
             e.target.onerror = null;
-            e.target.src = 'https://via.placeholder.com/600x400?text=No+Image';
+            e.target.src = defaultImage;
           }}
         />
       </div>
@@ -57,7 +59,7 @@ const NewsCard = ({ news }) => {
             rel="noopener noreferrer"
             className="inline-block w-full text-center bg-red-600 hover:bg-red-700 text-white font-semibold text-sm py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm"
           >
-            Read More →
+            Read More 
           </a>
         </div>
       </div>

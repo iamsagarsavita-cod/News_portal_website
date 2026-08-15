@@ -10,14 +10,15 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState([]);
 
-  const [category, setcategory] = useState("general");
+  const [category, setCategory] = useState("general");
 
   useEffect(() => {
         fetchNews();
-  }, []);
+  }, [category]);
 
     const fetchNews = async () => {
       try {
+        setLoading(true);
         let data;
         if(category === "general"){
             data = await getTopHeadlines();
@@ -87,7 +88,7 @@ const Home = () => {
         </button>
       </div>
 
-    <Category category={category} setcategory={setcategory} />
+    <Category category={category} setCategory={setCategory} />
 
       {/* News Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 py-6">
