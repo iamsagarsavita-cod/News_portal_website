@@ -38,7 +38,7 @@ export const searchNews = async (query) => {
         );
         return res.data.articles;
     } catch (error) {
-        console.log(error);
+        console.log(error, "Error in Fetching Category News");
         return[];
     }
 };

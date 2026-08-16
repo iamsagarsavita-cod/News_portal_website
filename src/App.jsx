@@ -5,6 +5,8 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import { ToastContainer } from "react-toastify";
+import NewsDetails from "./pages/NewsDetails";
 
 
 function App(){
@@ -13,6 +15,7 @@ function App(){
     <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/news/:id" element={<NewsDetails />}/>
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<NotFound />} />

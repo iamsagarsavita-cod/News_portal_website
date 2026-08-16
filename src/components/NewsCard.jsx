@@ -1,6 +1,7 @@
-import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 const NewsCard = ({ news }) => {
+  const navigate = useNavigate();
   // Defensive check to avoid runtime errors if news is undefined
   if (!news) return null;
 const defaultImage =
@@ -53,14 +54,11 @@ const defaultImage =
 
         {/* Action Button Link */}
         <div className="pt-2">
-          <a
-            href={news.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block w-full text-center bg-red-600 hover:bg-red-700 text-white font-semibold text-sm py-2 px-4 rounded-lg transition-colors duration-200 cursor-pointer shadow-sm"
-          >
-            Read More 
-          </a>
+          <button 
+          className="mt-4 bg-red-600 px-5 py-2 rounded-lg text-white hover:bg-red-700"
+          onClick={()=> navigate(`/news/${news.id}`)}>
+            Read More
+          </button>
         </div>
       </div>
     </div>
