@@ -65,7 +65,7 @@ const NewsCard = ({ news }) => {
 
           {/* BookMark add  */}
           <button
-            className={`px-4 py-2 rounded-lg ml-5 text-white  ${bookmarked ? "bg-yellow-100 " : "bg-red-600"}`}
+            className={`px-4 py-2 rounded-lg ml-5 text-white  ${bookmarked ? "bg-yellow-100 " : "bg-red-500"}`}
           >
             {bookmarked ? "saved" : "Bookmark"}
           </button>
