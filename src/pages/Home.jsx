@@ -5,13 +5,12 @@ import {
   getCategoryNews,
   searchNews,
 } from "../services/apiService";
-import Loader from "../Components/Loader";
-import NewsCard from "../Components/NewsCard";
+import Loader from "../components/Loader";
+import NewsCard from "../components/NewsCard";
 import Category from "../components/Category";
 import SeachBar from "../components/SeachBar";
 
 const Home = () => {
-  const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState([]);
 

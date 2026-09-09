@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { isBookmarked, toggleBookmark } from "../utils/bookmarks";
 
 const NewsCard = ({ news }) => {
   const navigate = useNavigate();
-  const [bookmarked, setBookMarked] = useState(false);
+  const [bookmarked, setBookMarked] = useState(() => isBookmarked(news));
   // Defensive check to avoid runtime errors if news is undefined
   if (!news) return null;
   const defaultImage =
@@ -65,9 +66,16 @@ const NewsCard = ({ news }) => {
 
           {/* BookMark add  */}
           <button
-            className={`px-4 py-2 rounded-lg ml-5 text-white  ${bookmarked ? "bg-yellow-100 " : "bg-red-500"}`}
+            type="button"
+            aria-pressed={bookmarked}
+            onClick={() => {
+              const saved = toggleBookmark(news);
+              setBookMarked(saved);
+              window.dispatchEvent(new Event("bookmarks-updated"));
+            }}
+            className={`px-4 py-2 rounded-lg ml-3 text-white transition ${bookmarked ? "bg-gray-800 hover:bg-gray-700" : "bg-red-600 hover:bg-red-700"}`}
           >
-            {bookmarked ? "saved" : "Bookmark"}
+            {bookmarked ? "Saved" : "Bookmark"}
           </button>
         </div>
       </div>

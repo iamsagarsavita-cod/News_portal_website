@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
 import NewsDetails from "./pages/NewsDetails";
+import Bookmarks from "./pages/Bookmarks";
 
 
 function App(){
@@ -18,6 +19,7 @@ function App(){
         <Route path="/news/:id" element={<NewsDetails />}/>
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/bookmarks" element={<Bookmarks />} />
         <Route path="*" element={<NotFound />} />
 
 
