@@ -3,10 +3,25 @@ import Axios from "axios";
 const API_KEY = import.meta.env.VITE_API_KEY;
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const getTopHeadlines = async () => {
+const getParams = ({ category, country, language, page, query, sortBy }) => {
+    const params = new URLSearchParams({
+        lang: language,
+        country,
+        max: "9",
+        page: String(page),
+        apikey: API_KEY,
+    });
+
+    if (category) params.set("category", category);
+    if (query) params.set("q", query);
+    if (query && sortBy) params.set("sortby", sortBy);
+    return params.toString();
+};
+
+export const getTopHeadlines = async ({ country = "us", language = "en", page = 1 } = {}) => {
     try{
         const res = await Axios.get(
-            `${BASE_URL}/top-headlines?category=general&lang=en&max=9&apikey=${API_KEY}`,
+            `${BASE_URL}/top-headlines?${getParams({ category: "general", country, language, page })}`,
         );
         console.log(res.data.articles);
         
@@ -18,10 +33,10 @@ export const getTopHeadlines = async () => {
 };
 
 // Category News
-export const getCategoryNews = async (category) => {
+export const getCategoryNews = async (category, { country = "us", language = "en", page = 1 } = {}) => {
     try{
         const res = await Axios.get(
-            `${BASE_URL}/top-headlines?category=${category}&lang=en&max=9&apikey=${API_KEY}`,
+            `${BASE_URL}/top-headlines?${getParams({ category, country, language, page })}`,
         );
         return res.data.articles;
     }catch (error) {
@@ -31,10 +46,10 @@ export const getCategoryNews = async (category) => {
 };
 
 // Search News
-export const searchNews = async (query) => {
+export const searchNews = async (query, { country = "us", language = "en", page = 1, sortBy = "publishedAt" } = {}) => {
     try {
         const res = await Axios.get(
-            `${BASE_URL}/search?q=${query}&lang=en&max=9&apikey=${API_KEY}`,
+            `${BASE_URL}/search?${getParams({ query, country, language, page, sortBy })}`,
         );
         return res.data.articles;
     } catch (error) {

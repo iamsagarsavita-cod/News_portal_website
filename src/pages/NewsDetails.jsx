@@ -1,4 +1,5 @@
 import { IoMdArrowBack } from "react-icons/io";
+import { FaShareAlt } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { isBookmarked, toggleBookmark } from "../utils/bookmarks";
@@ -7,6 +8,15 @@ const NewsDetails = () => {
   const location = useLocation();
   const newsData = location?.state?.news;
   const [bookmarked, setBookmarked] = useState(() => isBookmarked(newsData));
+  const readingTime = Math.max(1, Math.ceil((newsData?.content || newsData?.description || "").split(/\s+/).filter(Boolean).length / 200));
+
+  const shareArticle = async () => {
+    const data = { title: newsData.title, text: newsData.description, url: newsData.url };
+    try {
+      if (navigator.share) await navigator.share(data);
+      else { await navigator.clipboard.writeText(newsData.url); window.alert("Article link copied to clipboard."); }
+    } catch (error) { if (error.name !== "AbortError") console.log("Unable to share article", error); }
+  };
 
   console.log(newsData);
   
@@ -52,6 +62,7 @@ const NewsDetails = () => {
           <p className="text-gray-500 mt-4">
             Published on {newsData.publishedAt ? new Date(newsData.publishedAt).toLocaleDateString() : "Unknown date"}
           </p>
+          <p className="text-gray-500 mt-1 text-sm">By {newsData.author || "NewsHub Desk"} · {readingTime} min read</p>
 
           <div className="border-t my-5">
             <p className="text-lg text-gray-700 font-medium text-justify">
@@ -80,6 +91,9 @@ const NewsDetails = () => {
               className="inline-block ml-3 mt-5 font-medium bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700"
             >
               {bookmarked ? "Remove Bookmark" : "Bookmark Article"}
+            </button>
+            <button type="button" onClick={shareArticle} className="inline-flex items-center gap-2 ml-3 mt-5 font-medium bg-gray-100 text-gray-800 px-5 py-3 rounded-lg hover:bg-gray-200">
+              <FaShareAlt /> Share
             </button>
           </div>
         </div>

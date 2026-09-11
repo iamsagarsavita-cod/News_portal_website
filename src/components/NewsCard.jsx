@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaShareAlt } from "react-icons/fa";
 import { isBookmarked, toggleBookmark } from "../utils/bookmarks";
 
 const NewsCard = ({ news }) => {
@@ -9,6 +10,23 @@ const NewsCard = ({ news }) => {
   if (!news) return null;
   const defaultImage =
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR046TIwghhR9kPLo29rgRTuVdJmqNQs2iFZG5is60nZQ&s=10";
+  const readingTime = Math.max(
+    1,
+    Math.ceil((news.content || news.description || "").split(/\s+/).filter(Boolean).length / 200),
+  );
+
+  const shareArticle = async () => {
+    const shareData = { title: news.title, text: news.description, url: news.url };
+    try {
+      if (navigator.share) await navigator.share(shareData);
+      else {
+        await navigator.clipboard.writeText(news.url);
+        window.alert("Article link copied to clipboard.");
+      }
+    } catch (error) {
+      if (error.name !== "AbortError") console.log("Unable to share article", error);
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full border border-gray-100">
@@ -29,11 +47,11 @@ const NewsCard = ({ news }) => {
       <div className="p-5 flex flex-col flex-grow justify-between">
         <div>
           {/* Source Name & Date Header */}
-          <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+          <div className="flex items-center justify-between gap-2 text-xs text-gray-500 mb-2">
             <span className="font-semibold text-red-600 bg-red-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
               {news.source?.name || "General News"}
             </span>
-            <span>
+            <span className="whitespace-nowrap">
               {news.publishedAt
                 ? new Date(news.publishedAt).toLocaleDateString(undefined, {
                     year: "numeric",
@@ -43,6 +61,8 @@ const NewsCard = ({ news }) => {
                 : ""}
             </span>
           </div>
+
+          <p className="text-xs text-gray-500 mb-3">{news.author || "NewsHub Desk"} · {readingTime} min read</p>
 
           {/* Title */}
           <h2 className="text-lg font-bold text-gray-800 hover:text-red-600 transition-colors line-clamp-2 mb-2">
@@ -76,6 +96,9 @@ const NewsCard = ({ news }) => {
             className={`px-4 py-2 rounded-lg ml-3 text-white transition ${bookmarked ? "bg-gray-800 hover:bg-gray-700" : "bg-red-600 hover:bg-red-700"}`}
           >
             {bookmarked ? "Saved" : "Bookmark"}
+          </button>
+          <button type="button" onClick={shareArticle} aria-label={`Share ${news.title || "article"}`} className="p-2.5 rounded-lg ml-3 text-gray-700 bg-gray-100 hover:bg-gray-200">
+            <FaShareAlt />
           </button>
         </div>
       </div>
