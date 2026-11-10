@@ -1,7 +1,5 @@
 import Axios from "axios";
 
-const API_KEY = import.meta.env.VITE_API_KEY;
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 const CACHE_TTL_MS = 45_000;
 const MIN_REQUEST_INTERVAL_MS = 1_100;
 const MAX_RATE_LIMIT_RETRIES = 2;
@@ -10,18 +8,18 @@ const inFlightRequests = new Map();
 let requestQueue = Promise.resolve();
 let lastRequestStartedAt = 0;
 
-const getParams = ({ category, country, language, page, query, sortBy }) => {
+const getParams = (endpoint, { category, country, language, page, query, sortBy }) => {
   const params = new URLSearchParams({
+    endpoint,
     lang: language,
     country,
     max: "9",
     page: String(page),
-    apikey: API_KEY,
   });
   if (category) params.set("category", category);
   if (query) params.set("q", query);
   if (query && sortBy) params.set("sortby", sortBy);
-  return params.toString();
+  return `/api/news?${params.toString()}`;
 };
 
 const enqueueRateLimited = (task) => {
@@ -70,20 +68,18 @@ const errorMessageFor = (error) => {
   if (status === 429)
     return "GNews is rate-limiting requests. Wait a few seconds, then retry.";
   if (status === 403)
-    return "The GNews daily request quota is used up. Try again after the quota resets.";
+    return "GNews rejected the request or the daily quota is used up. Check the GNews account and try again later.";
   if (status === 401)
-    return "The GNews API key was rejected. Check VITE_API_KEY in your .env file.";
+    return "The GNews API key was rejected. Check the GNEWS_API_KEY environment variable.";
   if (status === 400)
     return "GNews rejected the request. Check the API configuration and selected filters.";
-  if (error.message === "News API configuration is missing")
-    return "News API configuration is missing. Add VITE_API_KEY and VITE_BASE_URL to your .env file.";
+  if (status === 500)
+    return "The news service is not configured. Set GNEWS_API_KEY in Vercel's server environment variables.";
   return "News could not load. Check your connection and try again.";
 };
 
 const requestArticles = async (endpoint, options) => {
-  if (!BASE_URL || !API_KEY)
-    throw new Error("News API configuration is missing");
-  const url = `${BASE_URL}/${endpoint}?${getParams(options)}`;
+  const url = getParams(endpoint, options);
   const cached = articleCache.get(url);
   if (cached && Date.now() - cached.createdAt < CACHE_TTL_MS)
     return cached.articles;

@@ -5,8 +5,7 @@ NewsHub is a React + Vite news reader. Browse current articles, search by topic,
 ## Run locally
 
 1. Install Node.js and npm.
-2. Copy `.env.example` to `.env`.
-3. Add a GNews API key to `VITE_API_KEY` in `.env`.
+2. Create a `.env` file in the project root and add `GNEWS_API_KEY=your_gnews_api_key`.
 4. Install dependencies and start Vite:
 
    ```sh
@@ -16,16 +15,15 @@ NewsHub is a React + Vite news reader. Browse current articles, search by topic,
 
 5. Open the local URL printed by Vite.
 
-`VITE_BASE_URL` defaults to `https://gnews.io/api/v4` in `.env`. The contact form uses FormSubmit and sends valid messages to `sagarsupport1@gmail.com`; that address must complete FormSubmit's one-time confirmation email before delivery is activated.
+The local Vite server proxies `/api/news` to GNews. In production, the Vercel function at `/api/news` proxies requests so the browser never calls GNews directly. The contact form uses FormSubmit and sends valid messages to `sagarsupport1@gmail.com`; that address must complete FormSubmit's one-time confirmation email before delivery is activated.
 
 ## Environment variables
 
-| Variable        | Purpose                                                     |
-| --------------- | ----------------------------------------------------------- |
-| `VITE_API_KEY`  | GNews API key used to request headlines and search results. |
-| `VITE_BASE_URL` | GNews API base URL, normally `https://gnews.io/api/v4`.     |
+| Variable        | Purpose                                                                 |
+| --------------- | ----------------------------------------------------------------------- |
+| `GNEWS_API_KEY` | GNews API key used by the local Vite proxy and Vercel serverless function. Keep this file private and never commit it. |
 
-Vite embeds variables prefixed with `VITE_` in browser code. The API key is therefore visible to visitors in the deployed site. GNews documents localhost-only browser requests on its Free plan; for a public production deployment, use a plan that supports your domain or proxy requests through a server that keeps the key private. Restrict quotas where possible.
+For Vercel, add `GNEWS_API_KEY` under the project's Environment Variables for Production, then redeploy. Keep the key out of `VITE_` variables: those are included in browser builds. The serverless function only allows the headlines and search endpoints and forwards the key in the `X-Api-Key` header.
 
 ## App behavior
 
