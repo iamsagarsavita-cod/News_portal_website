@@ -1,11 +1,12 @@
-import React from 'react'
-
-function Loader () {
+function Loader() {
   return (
-    <div className='flex justify-center py-16'>
-        <div className='w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin'></div>
+    <div
+      className="flex justify-center py-16"
+      role="status"
+      aria-label="Loading news"
+    >
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-red-600 border-t-transparent" />
     </div>
-  )
+  );
 }
-
 export default Loader;

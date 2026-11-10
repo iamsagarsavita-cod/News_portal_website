@@ -1,29 +1,45 @@
-import { FaFacebook, FaInstagram, FaTwitter, FaRegCopyright } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 
-
-function Footer(){
+function Footer() {
   return (
-    <footer className="bg-gray-900 text-white mt-10">
-        <div className="max-w-7xl mx-auto py-8 px-6 flex flex-col md:flex-row justify-between items-center">
-            <div>
-                <h2 className="text-2xl font-bold">NewsHub</h2>
-                <p className="text-gray-400">
-                    Get the latest breaking news from around the world.
-                    Fast, accurate and trusted updates every day.
-                </p>
-            </div>
-            <div className="flex gap-5 text-2xl my-5 md:my-0">
-                <FaFacebook className="hover:text-blue-500 cursor-pointer transition-all duration-300"/>
-                <FaInstagram className="hover:text-pink-500 cursor-pointer transition-all duration-300"/>
-                <FaTwitter className="hover:text-blue-500 cursor-pointer transition-all duration-300"/>
-            </div>
+    <footer className="mt-10 bg-gray-900 text-white">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-6 py-8 md:flex-row">
+        <div className="text-center md:text-left">
+          <Link to="/" className="text-2xl font-bold">
+            NewsHub
+          </Link>
+          <p className="mt-1 text-sm text-gray-300">
+            Current stories from around the world.
+          </p>
         </div>
-        <div className="border-t  border-gray-700 py-3 text-center text-gray-400">
-            ©️| 2026  NewsHub. | All Rights Reserved | Made with ❤️ by Sagar
+        <nav
+          className="flex gap-5 text-sm text-gray-200"
+          aria-label="Footer navigation"
+        >
+          <Link to="/about" className="hover:text-white">
+            About
+          </Link>
+          <Link to="/bookmarks" className="hover:text-white">
+            Bookmarks
+          </Link>
+          <Link to="/contact" className="hover:text-white">
+            Contact
+          </Link>
+        </nav>
+        <div
+          className="flex gap-5 text-xl text-gray-300"
+          aria-label="NewsHub social media"
+        >
+          <FaFacebook />
+          <FaInstagram />
+          <FaTwitter />
         </div>
-      
+      </div>
+      <div className="border-t border-gray-700 py-3 text-center text-xs text-gray-400">
+        © {new Date().getFullYear()} NewsHub · Built by Sagar
+      </div>
     </footer>
-  )
+  );
 }
-
 export default Footer;
